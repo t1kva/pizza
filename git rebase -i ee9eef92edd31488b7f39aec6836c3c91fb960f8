@@ -1,0 +1,23 @@
+[33mcommit 003e0981d1d03514053b61a6c7df3c20dab97ba3[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: tikva <dattebayo231@gmail.com>
+Date:   Fri Jan 19 21:29:55 2024 +0300
+
+    sort-list + key(react)
+
+[33mcommit ee9eef92edd31488b7f39aec6836c3c91fb960f8[m
+Author: tikva <dattebayo231@gmail.com>
+Date:   Fri Jan 19 20:55:30 2024 +0300
+
+    sort-list
+
+[33mcommit 1ee0c5525d9b04e594f459180393ca66144fc074[m
+Author: tikva <dattebayo231@gmail.com>
+Date:   Fri Jan 19 12:08:38 2024 +0300
+
+    first
+
+[33mcommit 24440a7e6fcad529a7b08b5846c72981ad50c0fd[m
+Author: tikva <dattebayo231@gmail.com>
+Date:   Thu Jan 11 10:48:01 2024 +0300
+
+    Initialize project using Create React App
