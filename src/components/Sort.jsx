@@ -6,6 +6,7 @@ import { setSort } from "../redux/slices/filterSlice";
 const Sort = () => {
   const dispatch = useDispatch();
   const sort = useSelector(state => state.filter.sort);
+  const sortRef = React.useRef();
 
   const [open, setOpen] = React.useState(false);
   const list = [
@@ -22,8 +23,20 @@ const Sort = () => {
     setOpen(false);
   }
 
+  React.useEffect(() => {
+    const clickOutsideHandler = (e) => {
+      if (!e.composedPath().includes(sortRef.current)) {
+        setOpen(false);
+      }
+    };
+
+    document.body.addEventListener("click", clickOutsideHandler);
+
+    return () => document.body.removeEventListener("click", clickOutsideHandler);
+  }, []);
+
   return (
-    <div className="sort">
+    <div ref={sortRef} className="sort">
       <div className="sort__label">
         <svg
           width="10"
