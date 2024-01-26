@@ -27,7 +27,7 @@ const cartSlice = createSlice({
       }, 0);
     },
 
-    remProduct(state,action) {
+    remProduct(state, action) {
       state.items = state.items.filter((obj) => obj.id !== action.payload);
     },
 
@@ -35,10 +35,13 @@ const cartSlice = createSlice({
       const findItem = state.items.find((obj) => obj.id === action.payload);
 
       if (findItem) {
-          findItem.count--;
+        findItem.count--;
+        state.totalPrice = state.items.reduce((sum, obj) => {
+          return obj.price * obj.count + sum; // если count меньше то и totalPrice меньше
+        }, 0);
       }
       if (findItem.count < 1) {
-        state.items = [];
+        state.items = state.items.filter((obj) => obj.id !== action.payload);
       }
     },
 
