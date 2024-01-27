@@ -1,6 +1,5 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import axios from 'axios'
 
 import Categories from "../components/Categories";
 import Sort from "../components/Sort";
@@ -9,39 +8,32 @@ import Skeleton from "../components/PizzaBlock/Skeleton";
 
 import { SearchContext } from "../App"
 import { setCategoryId } from "../redux/slices/filterSlice";
+import { fetchPizza } from "../redux/slices/pizzaSlice";
 
 const Home = () => {
   const dispatch = useDispatch();
   const {categoryId, sort} = useSelector((state) => state.filter);
   const sortType = sort.sortProp;
-
+  const { items, status } = useSelector((state) => state.pizza);
   const { searchValue } = React.useContext(SearchContext);
-  const [items, setItems] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(true);
-
 
   const onChangeCategory = (id) => {
     dispatch(setCategoryId(id));
   }
 
-  React.useEffect(() => {
-    setIsLoading(true);
-
+  const getPizza = async () => {
     const order = sortType.includes("-") ? "asc" : "desc";
     const sortBy = sortType.replace("-", "");
     const category = categoryId > 0 ? `category=${categoryId}` : "";
     const search = searchValue ? `&search=${searchValue}` : "";
 
-    axios
-      .get(
-        `https://65aaadff081bd82e1d978bf3.mockapi.io/items?${category}&sortby=${sortBy}&order=${order}${search}`
-      )
-      .then((res) => {
-        setItems(res.data);
-        setIsLoading(false);
-      });
+    dispatch(fetchPizza({ order, sortBy, category, search }));
 
     window.scrollTo(0, 0);
+  };
+
+  React.useEffect(() => {
+    getPizza();
   }, [categoryId, sortType, searchValue]);
 
   const pizzas = items.map((obj) => <PizzaBlock key={obj.id} {...obj}/>);
@@ -50,18 +42,21 @@ const Home = () => {
   return (
     <div className="container">
       <div className="content__top">
-        <Categories
-          value={categoryId}
-          onChangeCategory={onChangeCategory}
-        />
+        <Categories value={categoryId} onChangeCategory={onChangeCategory} />
         <Sort />
       </div>
       <h2 className="content__title">Все пиццы</h2>
-      <div className="content__items">
-        {isLoading
-          ? skeletons
-          :  pizzas}
-      </div>
+      {status === "error" ? (
+        <div className="content__error">
+          <h2>Ошибка😕</h2>
+          <p>Пиццы не смогли загрузиться  </p>
+          <p>Попробуйте повторить попытку позже.</p>
+        </div>
+      ) : (
+        <div className="content__items">
+          {status === "loading" ? skeletons : pizzas}
+        </div>
+      )}
     </div>
   );
 };
