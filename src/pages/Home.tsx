@@ -6,18 +6,16 @@ import Sort from "../components/Sort";
 import PizzaBlock from "../components/PizzaBlock";
 import Skeleton from "../components/PizzaBlock/Skeleton";
 
-import { SearchContext } from "../App"
-import { setCategoryId } from "../redux/slices/filterSlice";
-import { fetchPizza } from "../redux/slices/pizzaSlice";
+import { selectFilter, setCategoryId } from "../redux/slices/filterSlice";
+import { fetchPizza, selectPizzaData } from "../redux/slices/pizzaSlice";
 
-const Home = () => {
+const Home: React.FC = () => {
   const dispatch = useDispatch();
-  const {categoryId, sort} = useSelector((state) => state.filter);
+  const {categoryId, sort, searchValue} = useSelector(selectFilter);
   const sortType = sort.sortProp;
-  const { items, status } = useSelector((state) => state.pizza);
-  const { searchValue } = React.useContext(SearchContext);
+  const { items, status } = useSelector(selectPizzaData);
 
-  const onChangeCategory = (id) => {
+  const onChangeCategory = (id: number) => {
     dispatch(setCategoryId(id));
   }
 
@@ -26,6 +24,8 @@ const Home = () => {
     const sortBy = sortType.replace("-", "");
     const category = categoryId > 0 ? `category=${categoryId}` : "";
     const search = searchValue ? `&search=${searchValue}` : "";
+    
+    //@ts-ignore
 
     dispatch(fetchPizza({ order, sortBy, category, search }));
 
@@ -36,7 +36,7 @@ const Home = () => {
     getPizza();
   }, [categoryId, sortType, searchValue]);
 
-  const pizzas = items.map((obj) => <PizzaBlock key={obj.id} {...obj}/>);
+  const pizzas = items.map((obj: any) => <PizzaBlock key={obj.id} {...obj}/>);
   const skeletons = [...new Array(6)].map((_, index) => <Skeleton key={index} />);
 
   return (
