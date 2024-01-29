@@ -13,7 +13,7 @@ const Cart: React.FC = () => {
   const totalCount = items.reduce((sum: number, item: any) => sum + item.count, 0)
 
   const onClickClear = () => {
-    dispatch(clearProducts(items.id));
+    dispatch(clearProducts());
   };
 
   if (!totalPrice) {
